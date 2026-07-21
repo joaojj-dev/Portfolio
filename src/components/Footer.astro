@@ -1,0 +1,20 @@
+---
+import { site } from "../data/site";
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="border-line/70 border-t">
+  <div class="page-container flex flex-col gap-3 py-8 text-sm sm:flex-row sm:items-center sm:justify-between">
+    <p class="text-muted">Desenvolvido por {site.name} · {currentYear}</p>
+    <a
+      class="text-muted hover:text-accent w-fit rounded-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+      href={site.github}
+      target="_blank"
+      rel="noreferrer"
+      aria-label="Perfil GitHub de João Jorge (abre num novo separador)"
+    >
+      GitHub
+    </a>
+  </div>
+</footer>

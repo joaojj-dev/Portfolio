@@ -1,1 +1,98 @@
 @import "tailwindcss";
+
+@theme {
+  --color-canvas: #080b12;
+  --color-surface: #101621;
+  --color-elevated: #172033;
+  --color-line: #29344a;
+  --color-ink: #f4f7fb;
+  --color-muted: #a6b0c3;
+  --color-subtle: #748097;
+  --color-accent: #7aa2ff;
+  --color-accent-strong: #9a7cff;
+}
+
+:root {
+  color-scheme: dark;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+  background: var(--color-canvas);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  color: var(--color-ink);
+  background:
+    radial-gradient(circle at 82% 22%, rgb(91 124 255 / 12%), transparent 28rem),
+    radial-gradient(circle at 12% 78%, rgb(139 92 246 / 8%), transparent 26rem),
+    var(--color-canvas);
+}
+
+::selection {
+  color: var(--color-canvas);
+  background: var(--color-accent);
+}
+
+.site-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-shell main {
+  flex: 1;
+}
+
+.page-container {
+  width: min(100% - 2rem, 72rem);
+  margin-inline: auto;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  color: var(--color-canvas);
+  background: var(--color-accent);
+  border-radius: 0.5rem;
+  font-weight: 700;
+  transform: translateY(-160%);
+  transition: transform 150ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+@media (min-width: 640px) {
+  .page-container {
+    width: min(100% - 3rem, 72rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
