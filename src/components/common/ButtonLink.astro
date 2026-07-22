@@ -1,0 +1,39 @@
+---
+interface Props {
+  href: string;
+  label: string;
+  variant?: "primary" | "secondary" | "text";
+  download?: string;
+  external?: boolean;
+  ariaLabel?: string;
+}
+
+const {
+  href,
+  label,
+  variant = "primary",
+  download,
+  external = false,
+  ariaLabel,
+} = Astro.props;
+
+const variants = {
+  primary: "bg-accent text-accent-ink hover:bg-accent-strong border-transparent",
+  secondary: "border-line bg-surface/70 text-ink hover:border-accent/60 hover:bg-elevated",
+  text: "border-transparent text-accent hover:bg-accent/10",
+};
+---
+
+<a
+  class:list={[
+    "inline-flex min-h-12 items-center justify-center rounded-lg border px-6 py-3 text-sm font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent",
+    variants[variant],
+  ]}
+  {href}
+  download={download || undefined}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener noreferrer" : undefined}
+  aria-label={ariaLabel}
+>
+  {label}
+</a>

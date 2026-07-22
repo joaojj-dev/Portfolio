@@ -1,0 +1,33 @@
+---
+import type { Locale } from "../data/types";
+
+interface Props {
+  title: string;
+  description: string;
+  locale: Locale;
+  canonicalPath: string;
+  alternatePath?: string;
+  noIndex?: boolean;
+}
+
+const { title, description, locale, canonicalPath, alternatePath, noIndex = false } = Astro.props;
+const canonical = Astro.site ? new URL(canonicalPath, Astro.site) : undefined;
+const alternate = Astro.site && alternatePath ? new URL(alternatePath, Astro.site) : undefined;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+{noIndex && <meta name="robots" content="noindex, nofollow" />}
+{canonical && <link rel="canonical" href={canonical} />}
+{canonical && <meta property="og:url" content={canonical} />}
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:site_name" content="João Jorge" />
+<meta property="og:locale" content={locale === "pt" ? "pt_PT" : "en_US"} />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{canonical && <link rel="alternate" hreflang={locale === "pt" ? "pt-PT" : "en"} href={canonical} />}
+{alternate && <link rel="alternate" hreflang={locale === "pt" ? "en" : "pt-PT"} href={alternate} />}
+{Astro.site && <link rel="alternate" hreflang="x-default" href={new URL("/", Astro.site)} />}

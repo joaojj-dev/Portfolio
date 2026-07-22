@@ -1,40 +1,61 @@
 ---
-import { navigation, site } from "../data/site";
+import type { Locale } from "../data/types";
+import { site } from "../data/site";
+import { getContent } from "../i18n/content";
+import { getRoute, getSectionHref } from "../i18n/config";
+import LanguageSwitcher from "./navigation/LanguageSwitcher.astro";
+import ThemeSwitcher from "./navigation/ThemeSwitcher.astro";
+
+interface Props {
+  locale: Locale;
+  alternatePath?: string;
+}
+
+const { locale, alternatePath = locale === "pt" ? "/en/" : "/" } = Astro.props;
+const copy = getContent(locale);
+const homePath = getRoute(locale, "home");
 ---
 
 <header class="border-line/70 bg-canvas/90 sticky top-0 z-50 border-b backdrop-blur-xl">
   <nav
     class="page-container flex min-h-18 items-center justify-between gap-6"
-    aria-label="Navegação principal"
+    aria-label={copy.nav.label}
   >
     <a
       class="text-ink rounded-sm text-base font-semibold tracking-tight transition-colors hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
-      href="/"
-      aria-label="João Jorge — página inicial"
+      href={homePath}
+      aria-label={copy.nav.homeLabel}
     >
       {site.name}
     </a>
 
     <div class="hidden items-center gap-1 lg:flex">
       <ul class="flex items-center gap-1" role="list">
-        {navigation.map((item) => (
+        {copy.nav.items.map((item) => (
           <li>
             <a
               class="text-muted hover:text-ink rounded-md px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-              href={item.href}
+              href={getSectionHref(locale, item.section)}
+              data-nav-section={item.section}
+              data-section-link
+              data-section-target={item.section}
             >
               {item.label}
             </a>
           </li>
         ))}
       </ul>
+      <div class="ml-2 flex items-center gap-2">
+        <ThemeSwitcher {locale} />
+        <LanguageSwitcher {locale} {alternatePath} />
+      </div>
       <a
         class="border-accent/40 bg-accent/10 text-accent hover:border-accent hover:bg-accent hover:text-canvas ml-3 rounded-md border px-4 py-2 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         href={site.cv}
         download={site.cvDownloadName}
-        aria-label="Descarregar o CV de João Jorge em PDF"
+        aria-label={`${copy.hero.cvAction} — PDF`}
       >
-        CV
+        {copy.nav.cv}
       </a>
     </div>
 
@@ -42,30 +63,37 @@ import { navigation, site } from "../data/site";
       <summary
         class="border-line text-ink hover:border-accent/60 hover:bg-surface flex cursor-pointer list-none items-center rounded-md border px-4 py-2 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
-        Menu
+        {copy.nav.menu}
       </summary>
       <div
         class="border-line bg-surface absolute top-[calc(100%+0.75rem)] right-0 w-64 rounded-xl border p-3 shadow-2xl shadow-black/30"
       >
         <ul class="grid gap-1" role="list">
-          {navigation.map((item) => (
+          {copy.nav.items.map((item) => (
             <li>
               <a
                 class="text-muted hover:bg-elevated hover:text-ink block rounded-md px-3 py-2.5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-accent"
-                href={item.href}
+                href={getSectionHref(locale, item.section)}
+                data-nav-section={item.section}
+                data-section-link
+                data-section-target={item.section}
               >
                 {item.label}
               </a>
             </li>
           ))}
+          <li class="mt-2 grid grid-cols-2 gap-2 border-t border-line pt-3">
+            <ThemeSwitcher {locale} />
+            <LanguageSwitcher {locale} {alternatePath} />
+          </li>
           <li class="mt-2 border-t border-line pt-3">
             <a
               class="bg-accent/10 text-accent hover:bg-accent hover:text-canvas block rounded-md px-3 py-2.5 text-center text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-accent"
               href={site.cv}
               download={site.cvDownloadName}
-              aria-label="Descarregar o CV de João Jorge em PDF"
+              aria-label={`${copy.hero.cvAction} — PDF`}
             >
-              Descarregar CV
+              {copy.hero.cvAction}
             </a>
           </li>
         </ul>
@@ -73,3 +101,63 @@ import { navigation, site } from "../data/site";
     </details>
   </nav>
 </header>
+
+<script>
+  const initialiseHeader = () => {
+    const menu = document.querySelector<HTMLDetailsElement>("header details");
+    menu?.querySelectorAll("a").forEach((link) => {
+      if (link.dataset.closeReady === "true") return;
+      link.dataset.closeReady = "true";
+      link.addEventListener("click", () => menu.removeAttribute("open"));
+    });
+
+    document.querySelectorAll<HTMLAnchorElement>("[data-section-link]").forEach((link) => {
+      if (link.dataset.scrollReady === "true") return;
+      link.dataset.scrollReady = "true";
+      link.addEventListener("click", (event) => {
+        const target = document.getElementById(link.dataset.sectionTarget ?? "");
+        if (!target) return;
+        event.preventDefault();
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+        if (window.location.hash) {
+          history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+        }
+      });
+    });
+
+    if (window.location.hash && document.body.dataset.initialHashHandled !== "true") {
+      document.body.dataset.initialHashHandled = "true";
+      const target = document.getElementById(window.location.hash.slice(1));
+      if (target) {
+        requestAnimationFrame(() => target.scrollIntoView({ behavior: "auto", block: "start" }));
+        history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+      }
+    }
+
+    const sectionLinks = [...document.querySelectorAll<HTMLAnchorElement>("[data-nav-section]")];
+    const sections = sectionLinks
+      .map((link) => document.getElementById(link.dataset.navSection ?? ""))
+      .filter((section): section is HTMLElement => Boolean(section));
+
+    if (!sections.length || document.body.dataset.sectionObserver === "ready") return;
+    document.body.dataset.sectionObserver = "ready";
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (!visible) return;
+        sectionLinks.forEach((link) => {
+          if (link.dataset.navSection === visible.target.id) link.setAttribute("aria-current", "location");
+          else link.removeAttribute("aria-current");
+        });
+      },
+      { rootMargin: "-25% 0px -60%", threshold: [0.05, 0.25, 0.5] },
+    );
+    sections.forEach((section) => observer.observe(section));
+  };
+
+  initialiseHeader();
+  document.addEventListener("astro:page-load", initialiseHeader);
+</script>

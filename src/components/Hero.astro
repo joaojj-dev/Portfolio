@@ -1,47 +1,67 @@
 ---
 import { Image } from "astro:assets";
 import { site } from "../data/site";
+import type { Locale } from "../data/types";
+import { getContent } from "../i18n/content";
+import { getSectionHref } from "../i18n/config";
 import profilePhoto from "../assets/joao-jorge-profile.jpg";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const copy = getContent(locale);
 ---
 
-<section class="page-container grid min-h-[calc(100svh-4.5rem)] items-center gap-14 py-20 lg:grid-cols-[minmax(0,1.25fr)_minmax(18rem,0.75fr)] lg:py-28">
+<section class="page-container grid min-h-[calc(100svh-4.5rem)] items-center gap-12 py-16 sm:py-20 lg:grid-cols-[minmax(0,1.25fr)_minmax(18rem,0.75fr)] lg:gap-14 lg:py-24">
   <div class="max-w-3xl">
     <p class="text-accent mb-5 text-base font-semibold tracking-wide sm:text-lg">
-      {site.introduction}
+      {copy.hero.introduction}
     </p>
 
-    <h1 class="text-ink text-5xl font-bold tracking-[-0.04em] sm:text-6xl lg:text-7xl">
-      {site.role}
+    <h1 class="text-ink text-4xl font-bold tracking-[-0.04em] text-balance sm:text-6xl lg:text-7xl">
+      {copy.hero.role}
     </h1>
 
     <p class="text-muted mt-7 max-w-2xl text-lg leading-8 sm:text-xl sm:leading-9">
-      {site.description}
+      {copy.hero.description}
     </p>
 
     <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
       <a
         class="bg-accent text-canvas hover:bg-accent-strong inline-flex min-h-12 items-center justify-center rounded-lg px-6 py-3 text-sm font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
-        href="/#projetos"
+        href={getSectionHref(locale, "projetos")}
+        data-section-link
+        data-section-target="projetos"
       >
-        Ver projetos
+        {copy.hero.projectsAction}
       </a>
       <a
         class="border-line bg-surface/60 text-ink hover:border-accent/60 hover:bg-elevated inline-flex min-h-12 items-center justify-center rounded-lg border px-6 py-3 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
         href={site.cv}
         download={site.cvDownloadName}
-        aria-label="Descarregar o CV de João Jorge em PDF"
+        aria-label={`${copy.hero.cvAction} — PDF`}
       >
-        Descarregar CV
+        {copy.hero.cvAction}
+      </a>
+      <a
+        class="text-accent hover:bg-accent/10 inline-flex min-h-12 items-center justify-center rounded-lg border border-transparent px-6 py-3 text-sm font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+        href={getSectionHref(locale, "contacto")}
+        data-section-link
+        data-section-target="contacto"
+      >
+        {copy.hero.contactAction}
       </a>
     </div>
 
-    <div class="mt-9 flex items-center gap-5" aria-label="Perfis profissionais">
+    <nav class="mt-9 flex items-center gap-5" aria-label={copy.hero.profilesLabel}>
       <a
         class="text-muted hover:text-accent rounded-sm text-sm font-semibold underline decoration-line underline-offset-4 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
         href={site.github}
         target="_blank"
-        rel="noreferrer"
-        aria-label="GitHub de João Jorge (abre num novo separador)"
+        rel="noopener noreferrer"
+        aria-label={`GitHub — ${copy.common.opensNewTab}`}
       >
         GitHub
       </a>
@@ -50,20 +70,21 @@ import profilePhoto from "../assets/joao-jorge-profile.jpg";
         class="text-muted hover:text-accent rounded-sm text-sm font-semibold underline decoration-line underline-offset-4 transition-colors focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
         href={site.linkedin}
         target="_blank"
-        rel="noreferrer"
-        aria-label="LinkedIn de João Jorge (abre num novo separador)"
+        rel="noopener noreferrer"
+        aria-label={`LinkedIn — ${copy.common.opensNewTab}`}
       >
         LinkedIn
       </a>
-    </div>
+    </nav>
   </div>
 
-  <div class="mx-auto w-full max-w-md lg:justify-self-end">
+  <div class="mx-auto w-full max-w-sm sm:max-w-md lg:justify-self-end">
     <div class="relative aspect-[4/5] overflow-hidden rounded-3xl border border-line bg-surface shadow-2xl shadow-black/25">
       <Image
         class="h-full w-full object-cover object-[center_38%]"
         src={profilePhoto}
-        alt="João Jorge num espaço interior junto a uma escadaria"
+        alt={copy.hero.photoAlt}
+        layout="constrained"
         width={720}
         quality={85}
         loading="eager"

@@ -1,0 +1,73 @@
+---
+import type { Locale } from "../../data/types";
+import { getContent } from "../../i18n/content";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const labels = getContent(locale).theme;
+---
+
+<button
+  class="border-line text-muted hover:border-accent/60 hover:text-ink inline-flex min-h-10 items-center gap-2 rounded-md border px-3 text-xs font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+  type="button"
+  data-theme-toggle
+  data-label={labels.label}
+  data-label-light={labels.light}
+  data-label-dark={labels.dark}
+  aria-live="polite"
+>
+  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+    <circle cx="12" cy="12" r="3.5"></circle>
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path>
+  </svg>
+  <span data-theme-label>{labels.dark}</span>
+</button>
+
+<script>
+  const preferences = ["dark", "light"] as const;
+  type ThemePreference = (typeof preferences)[number];
+
+  const applyTheme = (preference: ThemePreference) => {
+    const resolved = preference;
+    document.documentElement.dataset.themePreference = preference;
+    document.documentElement.dataset.theme = resolved;
+    document.documentElement.style.colorScheme = resolved;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute(
+      "content",
+      resolved === "dark" ? "#080b12" : "#f5f7fb",
+    );
+
+    document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]").forEach((button) => {
+      const label = button.dataset[`label${preference[0].toUpperCase()}${preference.slice(1)}`];
+      const prefix = button.dataset.label;
+      const target = button.querySelector<HTMLElement>("[data-theme-label]");
+      if (target && label) target.textContent = label;
+      if (prefix && label) button.setAttribute("aria-label", `${prefix}: ${label}`);
+    });
+  };
+
+  const initialiseThemeControls = () => {
+    const stored = document.documentElement.dataset.themePreference as ThemePreference | undefined;
+    const preference = stored && preferences.includes(stored) ? stored : "dark";
+    applyTheme(preference);
+
+    document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]").forEach((button) => {
+      if (button.dataset.ready === "true") return;
+      button.dataset.ready = "true";
+      button.addEventListener("click", () => {
+        const current = document.documentElement.dataset.themePreference as ThemePreference;
+        const next = preferences[(preferences.indexOf(current) + 1) % preferences.length];
+        try {
+          localStorage.setItem("theme-preference", next);
+        } catch {}
+        applyTheme(next);
+      });
+    });
+  };
+
+  initialiseThemeControls();
+  document.addEventListener("astro:page-load", initialiseThemeControls);
+</script>

@@ -1,0 +1,24 @@
+---
+import type { Locale } from "../../data/types";
+import { getContent } from "../../i18n/content";
+import Hero from "../Hero.astro";
+import About from "../sections/About.astro";
+import Projects from "../sections/Projects.astro";
+import Skills from "../sections/Skills.astro";
+import Training from "../sections/Training.astro";
+import Contact from "../sections/Contact.astro";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const copy = getContent(locale);
+---
+
+<Hero {locale} />
+<About content={copy.about} />
+<Projects {locale} section={copy.projectsSection} />
+<Skills section={copy.skillsSection} groups={copy.skillGroups} />
+<Training section={copy.trainingSection} certifications={copy.certifications} />
+<Contact content={copy.contact} opensNewTab={copy.common.opensNewTab} />

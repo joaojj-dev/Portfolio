@@ -1,0 +1,47 @@
+---
+import type { Locale, SiteContent } from "../../data/types";
+import type { Project } from "../../data/projects";
+import TagList from "../common/TagList.astro";
+
+interface Props {
+  project: Project;
+  locale: Locale;
+  copy: SiteContent["projectsSection"];
+}
+
+const { project, locale, copy } = Astro.props;
+const categoryLabels = {
+  professional: copy.professional,
+  academic: copy.academic,
+  personal: copy.personal,
+};
+const codeLabels = {
+  public: copy.publicCode,
+  private: copy.privateCode,
+  unavailable: copy.unavailableCode,
+};
+---
+
+<article class="card-surface card-interactive flex h-full flex-col p-6 sm:p-7">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <p class="text-accent text-xs font-bold tracking-[0.14em] uppercase">{categoryLabels[project.category]}</p>
+    <p class="text-subtle text-xs font-semibold">{codeLabels[project.codeVisibility]}</p>
+  </div>
+  <h3 class="text-ink mt-5 text-xl font-bold tracking-[-0.02em] sm:text-2xl">{project.title[locale]}</h3>
+  <p class="text-muted mt-3 flex-1 leading-7">{project.description[locale]}</p>
+  <div class="mt-5"><TagList items={project.technologies} /></div>
+  {(project.repositoryUrl || project.liveUrl) && (
+    <div class="mt-6 flex flex-wrap gap-3">
+      {project.repositoryUrl && (
+        <a class="project-link" href={project.repositoryUrl} target="_blank" rel="noopener noreferrer" aria-label={`${copy.repositoryAction} — ${project.title[locale]}`}>
+          {copy.repositoryAction}<span aria-hidden="true">↗</span>
+        </a>
+      )}
+      {project.liveUrl && (
+        <a class="project-link" href={project.liveUrl} target="_blank" rel="noopener noreferrer" aria-label={`${copy.liveAction} — ${project.title[locale]}`}>
+          {copy.liveAction}<span aria-hidden="true">↗</span>
+        </a>
+      )}
+    </div>
+  )}
+</article>

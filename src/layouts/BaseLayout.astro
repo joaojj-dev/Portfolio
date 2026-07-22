@@ -1,36 +1,57 @@
 ---
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import SeoHead from "../components/SeoHead.astro";
+import type { Locale } from "../data/types";
+import { getContent } from "../i18n/content";
 import "../styles/global.css";
 
 interface Props {
   title: string;
   description: string;
+  locale: Locale;
+  canonicalPath: string;
+  alternatePath?: string;
+  noIndex?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, locale, canonicalPath, alternatePath, noIndex } = Astro.props;
+const copy = getContent(locale);
 ---
 
 <!doctype html>
-<html lang="pt-PT">
+<html lang={locale === "pt" ? "pt-PT" : "en"} data-theme="dark" data-theme-preference="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content="#080b12" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <title>{title}</title>
+    <script is:inline>
+      (() => {
+        try {
+          const stored = localStorage.getItem("theme-preference");
+          const preference = ["light", "dark"].includes(stored ?? "") ? stored : "dark";
+          const resolved = preference;
+          document.documentElement.dataset.themePreference = preference;
+          document.documentElement.dataset.theme = resolved;
+          document.documentElement.style.colorScheme = resolved;
+          document.querySelector('meta[name="theme-color"]')?.setAttribute(
+            "content",
+            resolved === "dark" ? "#080b12" : "#f5f7fb",
+          );
+        } catch {}
+      })();
+    </script>
+    <SeoHead {title} {description} {locale} {canonicalPath} {alternatePath} {noIndex} />
   </head>
   <body>
-    <a class="skip-link" href="#conteudo-principal">Saltar para o conteúdo</a>
+    <a class="skip-link" href="#conteudo-principal" data-section-link data-section-target="conteudo-principal">{copy.common.skipToContent}</a>
     <div class="site-shell">
-      <Header />
+      <Header {locale} {alternatePath} />
       <main id="conteudo-principal">
         <slot />
       </main>
-      <Footer />
+      <Footer {locale} />
     </div>
   </body>
 </html>

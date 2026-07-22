@@ -1,0 +1,29 @@
+---
+import type { SiteContent } from "../../data/types";
+import SectionHeading from "../common/SectionHeading.astro";
+
+interface Props {
+  section: SiteContent["skillsSection"];
+  groups: SiteContent["skillGroups"];
+}
+
+const { section, groups } = Astro.props;
+---
+
+<section id="competencias" class="section-block scroll-mt-28">
+  <div class="page-container">
+    <SectionHeading eyebrow={section.eyebrow} title={section.title} description={section.description} />
+    <div class="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+      {groups.map((group) => (
+        <article class="card-surface card-interactive p-6">
+          <h3 class="text-ink text-lg font-bold">{group.title}</h3>
+          <ul class="mt-5 flex flex-wrap gap-2" role="list">
+            {group.skills.map((skill) => (
+              <li class="border-line bg-canvas/50 text-ink rounded-md border px-3 py-2 text-sm font-semibold">{skill}</li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

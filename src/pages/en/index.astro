@@ -1,0 +1,19 @@
+---
+import HomePage from "../../components/pages/HomePage.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getContent } from "../../i18n/content";
+import { getRoute } from "../../i18n/config";
+
+const locale = "en" as const;
+const copy = getContent(locale);
+---
+
+<BaseLayout
+  title={copy.meta.homeTitle}
+  description={copy.meta.homeDescription}
+  {locale}
+  canonicalPath={getRoute(locale, "home")}
+  alternatePath={getRoute("pt", "home")}
+>
+  <HomePage {locale} />
+</BaseLayout>

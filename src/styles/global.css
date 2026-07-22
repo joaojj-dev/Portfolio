@@ -1,18 +1,31 @@
 @import "tailwindcss";
 
-@theme {
-  --color-canvas: #080b12;
-  --color-surface: #101621;
-  --color-elevated: #172033;
-  --color-line: #29344a;
-  --color-ink: #f4f7fb;
-  --color-muted: #a6b0c3;
-  --color-subtle: #748097;
-  --color-accent: #7aa2ff;
-  --color-accent-strong: #9a7cff;
+@theme inline {
+  --color-canvas: var(--theme-canvas);
+  --color-surface: var(--theme-surface);
+  --color-elevated: var(--theme-elevated);
+  --color-line: var(--theme-line);
+  --color-ink: var(--theme-ink);
+  --color-muted: var(--theme-muted);
+  --color-subtle: var(--theme-subtle);
+  --color-accent: var(--theme-accent);
+  --color-accent-strong: var(--theme-accent-strong);
+  --color-accent-ink: var(--theme-accent-ink);
 }
 
 :root {
+  --theme-canvas: #080b12;
+  --theme-surface: #101621;
+  --theme-elevated: #172033;
+  --theme-line: #29344a;
+  --theme-ink: #f4f7fb;
+  --theme-muted: #a6b0c3;
+  --theme-subtle: #748097;
+  --theme-accent: #7aa2ff;
+  --theme-accent-strong: #9a7cff;
+  --theme-accent-ink: #07101f;
+  --theme-glow-primary: rgb(91 124 255 / 12%);
+  --theme-glow-secondary: rgb(139 92 246 / 8%);
   color-scheme: dark;
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -21,26 +34,43 @@
   text-rendering: optimizeLegibility;
 }
 
+:root[data-theme="light"] {
+  --theme-canvas: #f5f7fb;
+  --theme-surface: #ffffff;
+  --theme-elevated: #e9eef8;
+  --theme-line: #cbd5e5;
+  --theme-ink: #111827;
+  --theme-muted: #4b5870;
+  --theme-subtle: #68758c;
+  --theme-accent: #315fc4;
+  --theme-accent-strong: #6546c7;
+  --theme-accent-ink: #ffffff;
+  --theme-glow-primary: rgb(49 95 196 / 10%);
+  --theme-glow-secondary: rgb(101 70 199 / 7%);
+  color-scheme: light;
+}
+
 html {
   min-width: 320px;
   scroll-behavior: smooth;
   scroll-padding-top: 5.5rem;
-  background: var(--color-canvas);
+  background: var(--theme-canvas);
 }
 
 body {
   min-height: 100vh;
   margin: 0;
-  color: var(--color-ink);
+  color: var(--theme-ink);
   background:
-    radial-gradient(circle at 82% 22%, rgb(91 124 255 / 12%), transparent 28rem),
-    radial-gradient(circle at 12% 78%, rgb(139 92 246 / 8%), transparent 26rem),
-    var(--color-canvas);
+    radial-gradient(circle at 82% 22%, var(--theme-glow-primary), transparent 28rem),
+    radial-gradient(circle at 12% 78%, var(--theme-glow-secondary), transparent 26rem),
+    var(--theme-canvas);
+  transition: color 180ms ease, background-color 180ms ease;
 }
 
 ::selection {
-  color: var(--color-canvas);
-  background: var(--color-accent);
+  color: var(--theme-accent-ink);
+  background: var(--theme-accent);
 }
 
 .site-shell {
@@ -51,6 +81,109 @@ body {
 
 .site-shell main {
   flex: 1;
+}
+
+.section-block {
+  padding-block: clamp(5rem, 10vw, 8rem);
+}
+
+.card-surface {
+  border: 1px solid var(--theme-line);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--theme-surface) 92%, transparent);
+}
+
+.card-interactive {
+  transition: border-color 180ms ease, transform 180ms ease, background-color 180ms ease;
+}
+
+.card-interactive:hover {
+  border-color: color-mix(in srgb, var(--theme-accent) 55%, var(--theme-line));
+  background: var(--theme-surface);
+  transform: translateY(-2px);
+}
+
+.social-icon-link {
+  display: inline-flex;
+  width: 2.75rem;
+  height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--theme-line);
+  border-radius: 0.625rem;
+  color: var(--theme-muted);
+  transition: color 150ms ease, border-color 150ms ease, background-color 150ms ease;
+}
+
+.social-icon-link:hover {
+  color: var(--theme-accent);
+  border-color: color-mix(in srgb, var(--theme-accent) 55%, var(--theme-line));
+  background: color-mix(in srgb, var(--theme-accent) 9%, transparent);
+}
+
+.social-icon-link:focus-visible {
+  outline: 2px solid var(--theme-accent);
+  outline-offset: 3px;
+}
+
+.social-icon-link svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+[data-nav-section][aria-current] {
+  color: var(--theme-ink);
+  background: color-mix(in srgb, var(--theme-accent) 12%, transparent);
+}
+
+.contact-glow {
+  position: absolute;
+  width: 24rem;
+  height: 24rem;
+  right: -10rem;
+  top: -12rem;
+  border-radius: 999px;
+  background: var(--theme-glow-primary);
+  filter: blur(18px);
+}
+
+.project-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 0.2rem;
+  color: var(--theme-accent);
+  font-size: 0.875rem;
+  font-weight: 700;
+  transition: color 150ms ease;
+}
+
+.project-link:hover {
+  color: var(--theme-accent-strong);
+}
+
+.project-link:focus-visible {
+  outline: 2px solid var(--theme-accent);
+  outline-offset: 4px;
+}
+
+.training-details summary {
+  width: fit-content;
+  cursor: pointer;
+  border-radius: 0.4rem;
+  color: var(--theme-accent);
+  font-weight: 700;
+  list-style-position: outside;
+  transition: color 150ms ease;
+}
+
+.training-details summary:hover {
+  color: var(--theme-accent-strong);
+}
+
+.training-details summary:focus-visible {
+  outline: 2px solid var(--theme-accent);
+  outline-offset: 4px;
 }
 
 .page-container {
@@ -94,5 +227,7 @@ body {
   *::after {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }

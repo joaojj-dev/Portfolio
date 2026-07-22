@@ -1,0 +1,40 @@
+---
+import type { SiteContent } from "../../data/types";
+import SectionHeading from "../common/SectionHeading.astro";
+
+interface Props {
+  section: SiteContent["trainingSection"];
+  certifications: SiteContent["certifications"];
+}
+
+const { section, certifications } = Astro.props;
+const featured = certifications.filter((item) => item.featured);
+const remaining = certifications.filter((item) => !item.featured);
+---
+
+<section id="formacoes" class="section-block scroll-mt-28">
+  <div class="page-container">
+    <SectionHeading eyebrow={section.eyebrow} title={section.title} description={section.description} />
+    <div class="mt-10 max-w-4xl card-surface p-6 sm:p-8">
+      <h3 class="text-ink text-xl font-bold">{section.featuredTitle}</h3>
+      <ul class="mt-6 grid gap-3 sm:grid-cols-2" role="list">
+        {featured.map((item) => (
+          <li class="border-line flex gap-3 border-b pb-3">
+            <span class="text-accent" aria-hidden="true">✓</span>
+            <div><p class="text-ink font-semibold">{item.title}</p><p class="text-subtle mt-1 text-sm">{item.issuer}</p></div>
+          </li>
+        ))}
+      </ul>
+      {remaining.length > 0 && (
+        <details class="training-details mt-7">
+          <summary>{section.allAction}</summary>
+          <ul class="mt-5 grid gap-3 sm:grid-cols-2" role="list">
+            {remaining.map((item) => (
+              <li class="text-muted border-line rounded-lg border px-4 py-3 text-sm font-semibold">{item.title}</li>
+            ))}
+          </ul>
+        </details>
+      )}
+    </div>
+  </div>
+</section>

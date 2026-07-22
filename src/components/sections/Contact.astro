@@ -1,0 +1,32 @@
+---
+import type { SiteContent } from "../../data/types";
+import { site } from "../../data/site";
+import ButtonLink from "../common/ButtonLink.astro";
+
+interface Props {
+  content: SiteContent["contact"];
+  opensNewTab: string;
+}
+
+const { content, opensNewTab } = Astro.props;
+---
+
+<section id="contacto" class="section-block scroll-mt-28">
+  <div class="page-container">
+    <div class="border-accent/25 bg-surface/80 relative overflow-hidden rounded-3xl border p-7 sm:p-10 lg:p-14">
+      <div class="contact-glow" aria-hidden="true"></div>
+      <div class="relative max-w-3xl">
+        <p class="text-accent text-sm font-bold tracking-[0.16em] uppercase">{content.eyebrow}</p>
+        <h2 class="text-ink mt-4 text-3xl font-bold tracking-[-0.03em] text-balance sm:text-5xl">{content.title}</h2>
+        <p class="text-muted mt-5 max-w-2xl text-lg leading-8">{content.description}</p>
+        <p class="text-subtle mt-5 text-sm"><strong class="text-muted">{content.locationLabel}:</strong> {content.location}</p>
+        <div class="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <ButtonLink href={`mailto:${site.email}`} label={site.email} />
+          <ButtonLink href={site.linkedin} label="LinkedIn" variant="secondary" external ariaLabel={`LinkedIn — ${opensNewTab}`} />
+          <ButtonLink href={site.github} label="GitHub" variant="secondary" external ariaLabel={`GitHub — ${opensNewTab}`} />
+          <ButtonLink href={site.cv} label={content.cvAction} variant="secondary" download={site.cvDownloadName} />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

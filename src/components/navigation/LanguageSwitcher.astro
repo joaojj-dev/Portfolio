@@ -1,0 +1,23 @@
+---
+import type { Locale } from "../../data/types";
+import { getContent } from "../../i18n/content";
+
+interface Props {
+  locale: Locale;
+  alternatePath: string;
+}
+
+const { locale, alternatePath } = Astro.props;
+const copy = getContent(locale).language;
+---
+
+<a
+  class="border-line text-muted hover:border-accent/60 hover:text-ink inline-flex min-h-10 min-w-10 items-center justify-center rounded-md border px-2.5 text-xs font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+  href={alternatePath}
+  lang={locale === "pt" ? "en" : "pt-PT"}
+  hreflang={locale === "pt" ? "en" : "pt-PT"}
+  aria-label={copy.switchTo}
+  title={copy.switchTo}
+>
+  {copy.shortAlternative}
+</a>

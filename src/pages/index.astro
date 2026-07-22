@@ -1,12 +1,19 @@
 ---
-import Hero from "../components/Hero.astro";
+import HomePage from "../components/pages/HomePage.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { site } from "../data/site";
+import { getContent } from "../i18n/content";
+import { getRoute } from "../i18n/config";
+
+const locale = "pt" as const;
+const copy = getContent(locale);
 ---
 
 <BaseLayout
-  title={`${site.name} | ${site.role}`}
-  description={site.description}
+  title={copy.meta.homeTitle}
+  description={copy.meta.homeDescription}
+  {locale}
+  canonicalPath={getRoute(locale, "home")}
+  alternatePath={getRoute("en", "home")}
 >
-  <Hero />
+  <HomePage {locale} />
 </BaseLayout>
