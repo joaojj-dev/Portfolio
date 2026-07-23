@@ -55,7 +55,6 @@ export interface SiteContent {
   projectsSection: {
     eyebrow: string;
     title: string;
-    description: string;
     professionalGroup: string;
     otherGroup: string;
     professional: string;
@@ -70,7 +69,6 @@ export interface SiteContent {
   skillsSection: {
     eyebrow: string;
     title: string;
-    description: string;
   };
   skillGroups: SkillGroup[];
   trainingSection: {
@@ -84,7 +82,6 @@ export interface SiteContent {
   contact: {
     eyebrow: string;
     title: string;
-    description: string;
     locationLabel: string;
     location: string;
     cvAction: string;

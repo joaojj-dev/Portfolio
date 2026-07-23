@@ -12,8 +12,8 @@ const featured = certifications.filter((item) => item.featured);
 const remaining = certifications.filter((item) => !item.featured);
 ---
 
-<section id="formacoes" class="section-block scroll-mt-28">
-  <div class="page-container">
+<section class="section-block">
+  <div id="formacoes" class="page-container section-anchor">
     <SectionHeading eyebrow={section.eyebrow} title={section.title} description={section.description} />
     <div class="mt-10 max-w-4xl card-surface p-6 sm:p-8">
       <h3 class="text-ink text-xl font-bold">{section.featuredTitle}</h3>

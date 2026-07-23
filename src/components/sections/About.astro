@@ -9,11 +9,11 @@ interface Props {
 const { content } = Astro.props;
 ---
 
-<section id="sobre" class="section-block scroll-mt-28">
-  <div class="page-container">
+<section class="section-block">
+  <div id="sobre" class="page-container section-anchor">
     <div class="max-w-4xl">
       <SectionHeading eyebrow={content.eyebrow} title={content.title} />
-      <div class="text-muted mt-8 grid gap-5 text-lg leading-8">
+      <div class="about-copy text-muted mt-8 grid gap-5 text-lg leading-8">
         {content.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
       </div>
     </div>

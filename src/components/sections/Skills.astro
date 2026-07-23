@@ -10,9 +10,9 @@ interface Props {
 const { section, groups } = Astro.props;
 ---
 
-<section id="competencias" class="section-block scroll-mt-28">
-  <div class="page-container">
-    <SectionHeading eyebrow={section.eyebrow} title={section.title} description={section.description} />
+<section class="section-block">
+  <div id="competencias" class="page-container section-anchor">
+    <SectionHeading eyebrow={section.eyebrow} title={section.title} />
     <div class="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
       {groups.map((group) => (
         <article class="card-surface card-interactive p-6">

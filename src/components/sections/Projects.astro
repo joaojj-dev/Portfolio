@@ -14,9 +14,9 @@ const professional = projects.filter((project) => project.category === "professi
 const other = projects.filter((project) => project.category !== "professional");
 ---
 
-<section id="projetos" class="section-block scroll-mt-28">
-  <div class="page-container">
-    <SectionHeading eyebrow={section.eyebrow} title={section.title} description={section.description} />
+<section class="section-block">
+  <div id="projetos" class="page-container section-anchor">
+    <SectionHeading eyebrow={section.eyebrow} title={section.title} />
     <div class="mt-12 grid gap-14">
       <div>
         <h3 class="text-ink text-xl font-bold sm:text-2xl">{section.professionalGroup}</h3>

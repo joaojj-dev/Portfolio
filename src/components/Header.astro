@@ -104,7 +104,15 @@ const homePath = getRoute(locale, "home");
 
 <script>
   const initialiseHeader = () => {
+    const header = document.querySelector<HTMLElement>("header");
     const menu = document.querySelector<HTMLDetailsElement>("header details");
+    const scrollToTarget = (target: HTMLElement, behavior: ScrollBehavior) => {
+      const headerHeight = header?.getBoundingClientRect().height ?? 0;
+      const visualGap = window.matchMedia("(max-width: 640px)").matches ? 24 : 40;
+      const top = target.getBoundingClientRect().top + window.scrollY - headerHeight - visualGap;
+      window.scrollTo({ top: Math.max(0, top), behavior });
+    };
+
     menu?.querySelectorAll("a").forEach((link) => {
       if (link.dataset.closeReady === "true") return;
       link.dataset.closeReady = "true";
@@ -119,7 +127,7 @@ const homePath = getRoute(locale, "home");
         if (!target) return;
         event.preventDefault();
         const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+        scrollToTarget(target, reduceMotion ? "auto" : "smooth");
         if (window.location.hash) {
           history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
         }
@@ -130,7 +138,7 @@ const homePath = getRoute(locale, "home");
       document.body.dataset.initialHashHandled = "true";
       const target = document.getElementById(window.location.hash.slice(1));
       if (target) {
-        requestAnimationFrame(() => target.scrollIntoView({ behavior: "auto", block: "start" }));
+        requestAnimationFrame(() => scrollToTarget(target, "auto"));
         history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
       }
     }
