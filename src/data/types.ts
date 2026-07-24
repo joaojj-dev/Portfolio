@@ -17,7 +17,9 @@ export interface Certification {
   id: string;
   title: string;
   issuer: string;
-  featured: boolean;
+  issuedAt: "2026-02" | "2026-03";
+  image: string;
+  credentialUrl: string;
 }
 
 export interface SiteContent {
@@ -75,8 +77,8 @@ export interface SiteContent {
     eyebrow: string;
     title: string;
     description: string;
-    featuredTitle: string;
-    allAction: string;
+    issuedDates: Record<Certification["issuedAt"], string>;
+    credlyAction: string;
   };
   certifications: Certification[];
   contact: {

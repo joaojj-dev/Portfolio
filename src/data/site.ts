@@ -3,6 +3,7 @@ export const site = {
   github: "https://github.com/joaojj-dev",
   linkedin: "https://www.linkedin.com/in/joao-jorge05/",
   instagram: "https://www.instagram.com/jpedro05._/",
+  credly: "https://www.credly.com/users/joao-jorge.40fc4a52/badges/credly",
   email: "joaopsj2005@gmail.com",
   cv: "/cv-joao-jorge.pdf",
   cvDownloadName: "CV - João Jorge.pdf",

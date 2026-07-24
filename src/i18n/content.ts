@@ -1,30 +1,97 @@
 import type { Locale, SiteContent } from "../data/types";
-
-const featuredTitles = new Set([
-  "Network Technician Career Path",
-  "Network Support and Security",
-  "Introduction to Cybersecurity",
-  "Introduction to Modern AI",
-  "Introduction to IoT",
-]);
+import digitalSafetyImage from "../assets/certifications/digital-safety.png";
+import industrialNetworkingImage from "../assets/certifications/industrial-networking.png";
+import cybersecurityImage from "../assets/certifications/introduction-cybersecurity.png";
+import iotImage from "../assets/certifications/introduction-iot.png";
+import modernAiImage from "../assets/certifications/modern-ai.png";
+import networkAddressingImage from "../assets/certifications/network-addressing.png";
+import networkSupportImage from "../assets/certifications/network-support.png";
+import networkTechnicianImage from "../assets/certifications/network-technician.png";
+import networkingBasicsImage from "../assets/certifications/networking-basics.png";
+import networkingDevicesImage from "../assets/certifications/networking-devices.png";
 
 const certifications = [
-  "Network Technician Career Path",
-  "Network Support and Security",
-  "Network Addressing and Basic Troubleshooting",
-  "Networking Devices and Initial Configuration",
-  "Networking Basics",
-  "Digital Safety and Security Awareness",
-  "Industrial Networking Essentials",
-  "Introduction to IoT",
-  "Introduction to Modern AI",
-  "Introduction to Cybersecurity",
-].map((title, index) => ({
-  id: `cisco-${index + 1}`,
-  title,
-  issuer: "Cisco Networking Academy",
-  featured: featuredTitles.has(title),
-}));
+  {
+    id: "network-technician",
+    title: "Network Technician Career Path",
+    issuer: "Cisco",
+    issuedAt: "2026-03",
+    image: networkTechnicianImage.src,
+    credentialUrl: "https://www.credly.com/earner/earned/badge/77fe10ff-8411-408c-95e3-dbbc32b2d43a",
+  },
+  {
+    id: "network-support",
+    title: "Network Support and Security",
+    issuer: "Cisco",
+    issuedAt: "2026-03",
+    image: networkSupportImage.src,
+    credentialUrl: "https://www.credly.com/earner/earned/badge/0efa4b9f-9a7b-4d47-aba4-db7abf67e8dd",
+  },
+  {
+    id: "network-addressing",
+    title: "Network Addressing and Basic Troubleshooting",
+    issuer: "Cisco",
+    issuedAt: "2026-03",
+    image: networkAddressingImage.src,
+    credentialUrl: "https://www.credly.com/earner/earned/badge/ba6aa138-b2f9-44d9-80cd-5b8a7d0ea45f",
+  },
+  {
+    id: "networking-devices",
+    title: "Networking Devices and Initial Configuration",
+    issuer: "Cisco",
+    issuedAt: "2026-03",
+    image: networkingDevicesImage.src,
+    credentialUrl: "https://www.credly.com/earner/earned/badge/888b1396-e1a3-4960-958b-a540f870f272",
+  },
+  {
+    id: "networking-basics",
+    title: "Networking Basics",
+    issuer: "Cisco",
+    issuedAt: "2026-03",
+    image: networkingBasicsImage.src,
+    credentialUrl: "https://www.credly.com/earner/earned/badge/18bc521f-3dfa-49c8-b273-8e69a1afac0c",
+  },
+  {
+    id: "digital-safety",
+    title: "Digital Safety and Security Awareness",
+    issuer: "Cisco",
+    issuedAt: "2026-02",
+    image: digitalSafetyImage.src,
+    credentialUrl: "https://www.credly.com/earner/earned/badge/3bdb7339-345d-4f3f-9620-f6d2d381bcfb",
+  },
+  {
+    id: "industrial-networking",
+    title: "Industrial Networking Essentials",
+    issuer: "Cisco",
+    issuedAt: "2026-02",
+    image: industrialNetworkingImage.src,
+    credentialUrl: "https://www.credly.com/earner/earned/badge/b727a3d8-0430-4933-86cb-8d8f4602386e",
+  },
+  {
+    id: "introduction-iot",
+    title: "Introduction to IoT",
+    issuer: "Cisco",
+    issuedAt: "2026-02",
+    image: iotImage.src,
+    credentialUrl: "https://www.credly.com/earner/earned/badge/764d1073-a1b3-4ad3-80c9-7683a61c66e4",
+  },
+  {
+    id: "modern-ai",
+    title: "Introduction to Modern AI",
+    issuer: "Cisco",
+    issuedAt: "2026-02",
+    image: modernAiImage.src,
+    credentialUrl: "https://www.credly.com/earner/earned/badge/54bd2f62-9209-485c-a6fb-84e7ade21601",
+  },
+  {
+    id: "cybersecurity",
+    title: "Introduction to Cybersecurity",
+    issuer: "Cisco",
+    issuedAt: "2026-02",
+    image: cybersecurityImage.src,
+    credentialUrl: "https://www.credly.com/earner/earned/badge/42549156-f56a-4326-887a-1358c80d2d46",
+  },
+] satisfies SiteContent["certifications"];
 
 export const content = {
   pt: {
@@ -68,8 +135,8 @@ export const content = {
     projectsSection: {
       eyebrow: "Projetos",
       title: "Trabalho desenvolvido em diferentes contextos.",
-      professionalGroup: "Projetos profissionais",
-      otherGroup: "Projetos académicos e pessoais",
+      professionalGroup: "Projetos Profissionais",
+      otherGroup: "Projetos Académicos e Pessoais",
       professional: "Profissional",
       academic: "Académico",
       personal: "Pessoal",
@@ -81,21 +148,21 @@ export const content = {
     },
     skillsSection: {
       eyebrow: "Competências",
-      title: "Tecnologias e ferramentas principais.",
+      title: "Tecnologias e Ferramentas Principais.",
     },
     skillGroups: [
-      { id: "web", title: "Desenvolvimento web", skills: ["HTML5", "CSS", "JavaScript", "TypeScript", "Blazor", "ASP.NET", "Bootstrap"] },
+      { id: "web", title: "Desenvolvimento web", skills: ["HTML5", "CSS", "JavaScript", "TypeScript", "Blazor", "ASP.NET", "ASP", "AngularJS", "jQuery", "Bootstrap", "Web design"] },
       { id: "backend", title: "Linguagens e backend", skills: ["C#", "Java", "Python", "PHP"] },
       { id: "data", title: "Bases de dados e APIs", skills: ["PostgreSQL", "MySQL", "SQL", "REST APIs", "Swagger", "Postman"] },
-      { id: "tools", title: "Ferramentas e práticas", skills: ["Git", "GitHub", "Docker", "Linux", "Azure DevOps", "Scrum"] },
-      { id: "complementary", title: "Conhecimentos complementares", skills: ["Arduino", "Three.js", "C", "C++", "Assembly x86"] },
+      { id: "tools", title: "Ferramentas e práticas", skills: ["Git", "GitHub", "Docker", "Linux", "Azure DevOps", "Scrum", "Adobe Photoshop", "Adobe Premiere Pro", "Audacity", "Microsoft Office"] },
+      { id: "complementary", title: "Conhecimentos complementares", skills: ["Arduino", "Arduino IDE", "Three.js", "C", "C++", "Assembly x86"] },
     ],
     trainingSection: {
       eyebrow: "Formações",
       title: "Aprendizagem contínua.",
-      description: "Tenho complementado o meu percurso com formações nas áreas de redes, segurança, IoT e IA.",
-      featuredTitle: "Formações em destaque",
-      allAction: "Ver todas as formações",
+      description: "Tenho complementado o meu percurso com formações nas áreas de redes, cibersegurança, IoT e IA.",
+      issuedDates: { "2026-02": "Emitida em fevereiro de 2026", "2026-03": "Emitida em março de 2026" },
+      credlyAction: "Ver todas as certificações no Credly",
     },
     certifications,
     contact: {
@@ -156,8 +223,8 @@ export const content = {
     projectsSection: {
       eyebrow: "Projects",
       title: "Work developed across different contexts.",
-      professionalGroup: "Professional projects",
-      otherGroup: "Academic and personal projects",
+      professionalGroup: "Professional Projects",
+      otherGroup: "Academic and Personal Projects",
       professional: "Professional",
       academic: "Academic",
       personal: "Personal",
@@ -169,21 +236,21 @@ export const content = {
     },
     skillsSection: {
       eyebrow: "Skills",
-      title: "Main technologies and tools.",
+      title: "Main Technologies and Tools.",
     },
     skillGroups: [
-      { id: "web", title: "Web development", skills: ["HTML5", "CSS", "JavaScript", "TypeScript", "Blazor", "ASP.NET", "Bootstrap"] },
+      { id: "web", title: "Web development", skills: ["HTML5", "CSS", "JavaScript", "TypeScript", "Blazor", "ASP.NET", "ASP", "AngularJS", "jQuery", "Bootstrap", "Web design"] },
       { id: "backend", title: "Languages and backend", skills: ["C#", "Java", "Python", "PHP"] },
       { id: "data", title: "Databases and APIs", skills: ["PostgreSQL", "MySQL", "SQL", "REST APIs", "Swagger", "Postman"] },
-      { id: "tools", title: "Tools and practices", skills: ["Git", "GitHub", "Docker", "Linux", "Azure DevOps", "Scrum"] },
-      { id: "complementary", title: "Additional knowledge", skills: ["Arduino", "Three.js", "C", "C++", "Assembly x86"] },
+      { id: "tools", title: "Tools and practices", skills: ["Git", "GitHub", "Docker", "Linux", "Azure DevOps", "Scrum", "Adobe Photoshop", "Adobe Premiere Pro", "Audacity", "Microsoft Office"] },
+      { id: "complementary", title: "Additional knowledge", skills: ["Arduino", "Arduino IDE", "Three.js", "C", "C++", "Assembly x86"] },
     ],
     trainingSection: {
       eyebrow: "Certifications",
       title: "Continuous learning.",
-      description: "I have complemented my path with training in networking, security, IoT and AI.",
-      featuredTitle: "Featured certifications",
-      allAction: "View all certifications",
+      description: "I have been supplementing my career with training in the fields of networking, cybersecurity, IoT and AI.",
+      issuedDates: { "2026-02": "Issued in February 2026", "2026-03": "Issued in March 2026" },
+      credlyAction: "View all certifications on Credly",
     },
     certifications,
     contact: {

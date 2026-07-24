@@ -112,6 +112,13 @@ const homePath = getRoute(locale, "home");
       const top = target.getBoundingClientRect().top + window.scrollY - headerHeight - visualGap;
       window.scrollTo({ top: Math.max(0, top), behavior });
     };
+    const sectionLinks = [...document.querySelectorAll<HTMLAnchorElement>("[data-nav-section]")];
+    const setActiveSection = (sectionId: string) => {
+      sectionLinks.forEach((link) => {
+        if (link.dataset.navSection === sectionId) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      });
+    };
 
     menu?.querySelectorAll("a").forEach((link) => {
       if (link.dataset.closeReady === "true") return;
@@ -126,6 +133,7 @@ const homePath = getRoute(locale, "home");
         const target = document.getElementById(link.dataset.sectionTarget ?? "");
         if (!target) return;
         event.preventDefault();
+        setActiveSection(link.dataset.sectionTarget ?? "");
         const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         scrollToTarget(target, reduceMotion ? "auto" : "smooth");
         if (window.location.hash) {
@@ -143,27 +151,43 @@ const homePath = getRoute(locale, "home");
       }
     }
 
-    const sectionLinks = [...document.querySelectorAll<HTMLAnchorElement>("[data-nav-section]")];
-    const sections = sectionLinks
-      .map((link) => document.getElementById(link.dataset.navSection ?? ""))
-      .filter((section): section is HTMLElement => Boolean(section));
+    const sections = sectionLinks.reduce<HTMLElement[]>((uniqueSections, link) => {
+      const section = document.getElementById(link.dataset.navSection ?? "");
+      if (section && !uniqueSections.includes(section)) uniqueSections.push(section);
+      return uniqueSections;
+    }, []);
 
-    if (!sections.length || document.body.dataset.sectionObserver === "ready") return;
-    document.body.dataset.sectionObserver = "ready";
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (!visible) return;
-        sectionLinks.forEach((link) => {
-          if (link.dataset.navSection === visible.target.id) link.setAttribute("aria-current", "location");
-          else link.removeAttribute("aria-current");
-        });
-      },
-      { rootMargin: "-25% 0px -60%", threshold: [0.05, 0.25, 0.5] },
-    );
-    sections.forEach((section) => observer.observe(section));
+    const updateActiveSectionFromScroll = () => {
+      const headerHeight = header?.getBoundingClientRect().height ?? 0;
+      const activationLine = headerHeight + 64;
+      let activeSection: HTMLElement | undefined;
+
+      sections.forEach((section) => {
+        if (section.getBoundingClientRect().top <= activationLine) activeSection = section;
+      });
+
+      setActiveSection(activeSection?.id ?? "");
+    };
+
+    if (!sections.length) return;
+    if (document.body.dataset.sectionScrollTracker === "ready") {
+      updateActiveSectionFromScroll();
+      return;
+    }
+
+    document.body.dataset.sectionScrollTracker = "ready";
+    let updateFrame: number | undefined;
+    const scheduleActiveSectionUpdate = () => {
+      if (updateFrame !== undefined) return;
+      updateFrame = requestAnimationFrame(() => {
+        updateFrame = undefined;
+        updateActiveSectionFromScroll();
+      });
+    };
+
+    window.addEventListener("scroll", scheduleActiveSectionUpdate, { passive: true });
+    window.addEventListener("resize", scheduleActiveSectionUpdate);
+    updateActiveSectionFromScroll();
   };
 
   initialiseHeader();
